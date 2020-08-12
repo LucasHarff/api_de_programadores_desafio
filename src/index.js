@@ -1,10 +1,9 @@
 const express = require("express");
-const cors = require("cors");
-const { uuid, isUuid } = require("uuidv4");
+
+// const { uuid, isUuid } = require("uuidv4");
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 
 const programadores = [];
@@ -21,7 +20,7 @@ function logRequests(request, response, next) {
   console.timeEnd(logLabel);
 }
 
-function validateScrapId(request, response, next) {
+function validateProgram(request, response, next) {
   const { id } = request.params;
 
   if (!isUuid(id)) {
@@ -34,14 +33,14 @@ function validateScrapId(request, response, next) {
 }
 
 app.use(logRequests);
-app.use("/programadores/:id", validateScrapId);
+app.use("/programadores/:id", validateProgram);
 
 app.get("/programadores", (request, response) => {
   const { title } = request.query;
 
   const results = title
-    ? programadores.filter((scrap) =>
-        scrap.title.toLowerCase().includes(title.toLowerCase())
+    ? programadores.filter((programador) =>
+        programador.title.toLowerCase().includes(title.toLowerCase())
       )
     : programadores;
 
@@ -51,44 +50,48 @@ app.get("/programadores", (request, response) => {
 app.post("/programadores", (request, response) => {
   const { title, message } = request.body;
 
-  const scrap = { id: uuid(), title, message };
+  const programador = { id: uuid(), title, message };
 
-  programadores.push(scrap);
+  programadores.push(programador);
 
-  return response.json(scrap);
+  return response.json(programador);
 });
 
 app.put("/programadores/:id", (request, response) => {
   const { id } = request.params;
   const { title, message } = request.body;
 
-  const scrapIndex = programadores.findIndex((scrap) => scrap.id === id);
+  const programadorIndex = programadores.findIndex(
+    (programador) => programador.id === id
+  );
 
-  if (scrapIndex < 0) {
-    return response.status(400).json({ error: "scrap not found." });
+  if (programadorIndex < 0) {
+    return response.status(400).json({ error: "programador not found." });
   }
 
-  const scrap = {
+  const programador = {
     id,
     title,
     message,
   };
 
-  programadores[scrapIndex] = scrap;
+  programadores[programadorIndex] = programador;
 
-  return response.json(scrap);
+  return response.json(programador);
 });
 
 app.delete("/programadores/:id", (request, response) => {
   const { id } = request.params;
 
-  const scrapIndex = programadores.findIndex((scrap) => scrap.id === id);
+  const programadorIndex = programadores.findIndex(
+    (programador) => programador.id === id
+  );
 
-  if (scrapIndex < 0) {
-    return response.status(400).json({ error: "scrap not found." });
+  if (programadorIndex < 0) {
+    return response.status(400).json({ error: "programador not found." });
   }
 
-  programadores.splice(scrapIndex, 1);
+  programadores.splice(programadorIndex, 1);
 
   return response.status(204).send();
 });
