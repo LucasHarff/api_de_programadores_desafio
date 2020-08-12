@@ -1,6 +1,6 @@
 const express = require("express");
 
-// const { uuid, isUuid } = require("uuidv4");
+const { uuid, isUuid } = require("uuidv4");
 
 const app = express();
 
@@ -44,13 +44,20 @@ app.get("/programadores", (request, response) => {
       )
     : programadores;
 
-  return response.json(results);
+  return response.json(programadores);
 });
 
 app.post("/programadores", (request, response) => {
-  const { title, message } = request.body;
+  const { firstname, lastname, age, company, tecnology } = request.body;
 
-  const programador = { id: uuid(), title, message };
+  const programador = {
+    id: uuid(),
+    firstname,
+    lastname,
+    age,
+    company,
+    tecnology,
+  };
 
   programadores.push(programador);
 
@@ -96,7 +103,7 @@ app.delete("/programadores/:id", (request, response) => {
   return response.status(204).send();
 });
 
-const port = 3333;
+const port = 3334;
 app.listen(port, () => {
   console.log(`🚀 Server up and running on PORT ${port}`);
 });
