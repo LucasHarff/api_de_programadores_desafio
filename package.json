@@ -1,0 +1,11 @@
+{
+  "name": "api_de_programadores_desafio",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/LucasHarff/api_de_programadores_desafio.git",
+  "author": "LucasHarff <lucasharff@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
